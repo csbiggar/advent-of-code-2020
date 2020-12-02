@@ -2,6 +2,7 @@ package day1
 
 import helpers.FileReader
 import java.lang.IllegalArgumentException
+import kotlin.system.measureTimeMillis
 
 private val input = FileReader("/day1/input1.txt").readInts()
 
@@ -12,11 +13,17 @@ For 3 components: Numbers [983, 314, 723], Result: 223162626
  */
 
 fun main() {
-    val resultFor2 = findComponentsSummingTo2020(input, 2)
-    printResult(resultFor2)
-
-    val resultFor3 = findComponentsSummingTo2020(input, 3)
-    printResult(resultFor3)
+    val time1 = measureTimeMillis {
+        val resultFor2 = findComponentsSummingTo2020(input, 2)
+        printResult(resultFor2)
+    }
+    println("Part 1 takes $time1 ms\n")
+    
+    val time2 = measureTimeMillis {
+        val resultFor3 = findComponentsSummingTo2020(input, 3)
+        printResult(resultFor3)
+    }
+    println("Part 2 takes $time2 ms")
 }
 
 private fun printResult(result: List<Int>) {

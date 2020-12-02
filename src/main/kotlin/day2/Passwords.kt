@@ -1,6 +1,7 @@
 package day2
 
 import helpers.FileReader
+import kotlin.system.measureTimeMillis
 
 data class PasswordEntry(val password: String, val requiredLetter: Char, val minOccurrence: Int, val maxOccurrence: Int)
 
@@ -14,11 +15,17 @@ D2#2 616 valid passwords
 private val input = FileReader("/day2/input.txt").readLines()
 
 fun main() {
-    val result1 = findValidPasswordsUsingFirstRules(input)
-    println("Using first rules: ${result1.size}")
+    val time1 = measureTimeMillis {
+        val result1 = findValidPasswordsUsingFirstRules(input)
+        println("Using first rules: ${result1.size}")
+    }
+    println("Part 1 takes $time1 ms\n")
 
-    val result2 = findValidPasswordsUsingSecondRules(input)
-    println("Using second rules: ${result2.size}")
+    val time2 = measureTimeMillis {
+        val result2 = findValidPasswordsUsingSecondRules(input)
+        println("Using second rules: ${result2.size}")
+    }
+    println("Part 2 takes $time2 ms")
 }
 
 fun findValidPasswordsUsingFirstRules(input: List<String>): List<PasswordEntry> {
