@@ -11,6 +11,10 @@ class FileReader(fileName: String) {
         return file.readLines()
     }
 
+    fun readText(): String {
+        return file.readText()
+    }
+
     fun readInts(): List<Int> {
         return file.readLines().map { it.toInt() }
     }
