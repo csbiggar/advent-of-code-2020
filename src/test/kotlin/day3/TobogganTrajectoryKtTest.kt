@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 internal class TobogganTrajectoryKtTest {
 
@@ -300,7 +301,7 @@ internal class TobogganTrajectoryKtTest {
 
         val result = productOfAllTrees(input)
 
-        assertThat(result).isEqualTo(336)
+        assertThat(result).isEqualTo("336".toBigDecimal())
     }
 
     @Test

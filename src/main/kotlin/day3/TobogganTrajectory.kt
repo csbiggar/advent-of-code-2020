@@ -41,8 +41,10 @@ fun productOfAllTrees(input: String): BigDecimal {
         }
         .map { rightDown ->
             val result = findNumberOfTreesEncountered(input, rightDown.first, rightDown.second)
+//            println("-----------------------------------------------------------------}")
 //            println("Calculating for right ${rightDown.first} down ${rightDown.second}")
 //            println("   ## Trees: $result")
+//            println("-----------------------------------------------------------------}")
             //TODO put bigDecimal or other large number holder in better place
             result.toBigDecimal()
         }
@@ -57,10 +59,10 @@ fun findNumberOfTreesEncountered(input: String, right: Int, down: Int): Int {
         .drop(down)
         .forEachIndexed { zeroBasedY, line ->
             val thisLineIsInteresting = (zeroBasedY + down) % down == 0
-            println("Line ${zeroBasedY + down + 1}, x $x, ${thisLineIsInteresting.toString().padStart(7)},  $line")
+//            println("Line ${zeroBasedY + down + 1}, x $x, ${thisLineIsInteresting.toString().padStart(7)},  $line")
             if (thisLineIsInteresting) {
                 if (line[x] == TREE) {
-                    println("  ## tree")
+//                    println("  ## tree")
                     treeCount++
                 }
                 x += right
