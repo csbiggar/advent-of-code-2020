@@ -1,7 +1,6 @@
 package day3
 
 import helpers.FileReader
-import java.math.BigDecimal
 import kotlin.system.measureTimeMillis
 
 private const val TREE = '#'
@@ -33,36 +32,16 @@ fun main() {
 
 }
 
-fun productOfAllTrees(input: String): BigDecimal {
-    return rightAndDownCoords
-        .lines()
-        .map {
-            Pair(it.substringBefore(",").toInt(), it.substringAfter(",").toInt())
-        }
-        .map { rightDown ->
-            val result = findNumberOfTreesEncountered(input, rightDown.first, rightDown.second)
-//            println("-----------------------------------------------------------------}")
-//            println("Calculating for right ${rightDown.first} down ${rightDown.second}")
-//            println("   ## Trees: $result")
-//            println("-----------------------------------------------------------------}")
-            //TODO put bigDecimal or other large number holder in better place
-            result.toBigDecimal()
-        }
-        .reduce { runningTotal, next -> runningTotal * next }
-}
-
-fun findNumberOfTreesEncountered(input: String, right: Int, down: Int): Int {
+fun findNumberOfTreesEncountered(input: String, right: Int, down: Int): Long {
     var x = right
-    var treeCount = 0
+    var treeCount: Long = 0
 
     extendLines(input, right, down)
         .drop(down)
         .forEachIndexed { zeroBasedY, line ->
-            val thisLineIsInteresting = (zeroBasedY + down) % down == 0
-//            println("Line ${zeroBasedY + down + 1}, x $x, ${thisLineIsInteresting.toString().padStart(7)},  $line")
-            if (thisLineIsInteresting) {
+            val lineInUse = (zeroBasedY + down) % down == 0
+            if (lineInUse) {
                 if (line[x] == TREE) {
-//                    println("  ## tree")
                     treeCount++
                 }
                 x += right
@@ -70,6 +49,19 @@ fun findNumberOfTreesEncountered(input: String, right: Int, down: Int): Int {
         }
 
     return treeCount
+}
+
+fun productOfAllTrees(input: String): Long {
+    return rightAndDownCoords
+        .lines()
+        .map {
+            Pair(it.substringBefore(",").toInt(), it.substringAfter(",").toInt())
+        }
+        .map { rightDown ->
+            findNumberOfTreesEncountered(input, rightDown.first, rightDown.second)
+
+        }
+        .reduce { runningTotal, next -> runningTotal * next }
 }
 
 private fun extendLines(input: String, right: Int, down: Int): List<String> {
