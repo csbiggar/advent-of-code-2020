@@ -32,12 +32,9 @@ fun findValidPassports(input: String): List<RawPassport> {
 }
 
 fun splitToPassports(input: String): List<String> {
-
     return input.lines()
         .joinToString(" ") {
-            if (it.isBlank()) {
-                DELIMITER
-            } else it
+            if (it.isBlank()) DELIMITER else it
         }
         .split(" $DELIMITER ")
 }
