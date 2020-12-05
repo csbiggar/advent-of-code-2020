@@ -87,14 +87,13 @@ data class RawPassport(
     }
 
     fun isValid(): Boolean {
-        val result =  numberIsValid(byr, 1920, 2002)
+        return (numberIsValid(byr, 1920, 2002)
                 && numberIsValid(iyr, 2010, 2020)
                 && numberIsValid(eyr, 2020, 2030)
                 && heightIsValid(hgt)
                 && hairColourIsValid(hcl)
                 && eyeColourIsValid(ecl)
-                && passportIdIsValid(pid)
-        return result
+                && passportIdIsValid(pid))
     }
 
     private fun numberIsValid(byr: String?, minimumInclusive: Int, maximumInclusive: Int): Boolean {
@@ -132,7 +131,6 @@ data class RawPassport(
     private fun hairColourIsValid(hcl: String?): Boolean {
         if (hcl == null) return false
         val regex = """#[a-f0-9]{6}""".toRegex()
-
         return regex.matches(hcl)
     }
 
@@ -142,11 +140,3 @@ data class RawPassport(
         return regex.matches(pid)
     }
 }
-
-
-/*
-
-a:b c:d
-
-
- */
