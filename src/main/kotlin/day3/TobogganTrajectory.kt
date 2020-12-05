@@ -3,8 +3,9 @@ package day3
 import helpers.FileReader
 import kotlin.system.measureTimeMillis
 
-private const val TREE = '#'
 private val input = FileReader("/day3/input.txt").readText()
+
+private const val TREE = '#'
 private val rightAndDownCoords = """  |1,1
                                       |3,1
                                       |5,1
