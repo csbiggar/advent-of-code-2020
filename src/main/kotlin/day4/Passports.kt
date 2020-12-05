@@ -4,8 +4,13 @@ import helpers.FileReader
 
 private val input = FileReader("/day4/input.txt").readText()
 
-
 private const val DELIMITER = "BREAK"
+
+/*
+ D4#1 250 passports with all mandatory fields
+ D4#2 158 passports with all mandatory fields & all data valid
+
+ */
 
 fun main() {
     val withMandatoryFields = findPassportsWithAllMandatoryFields(input)
