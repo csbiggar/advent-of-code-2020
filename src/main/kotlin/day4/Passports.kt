@@ -1,10 +1,9 @@
 package day4
 
 import helpers.FileReader
+import helpers.splitByBlankLines
 
 private val input = FileReader("/day4/input.txt").readText()
-
-private const val DELIMITER = "BREAK"
 
 /*
  D4#1 250 passports with all mandatory fields
@@ -21,22 +20,14 @@ fun main() {
 }
 
 fun findPassportsWithAllMandatoryFields(input: String): List<String> {
-    return splitToPassports(input).filter { hasAllMandatoryFields(it) }
+    return input.splitByBlankLines().filter { hasAllMandatoryFields(it) }
 }
 
 
 fun findValidPassports(input: String): List<RawPassport> {
-    return splitToPassports(input)
+    return input.splitByBlankLines()
         .map { RawPassport.fromInputString(it) }
         .filter { it.isValid() }
-}
-
-fun splitToPassports(input: String): List<String> {
-    return input.lines()
-        .joinToString(" ") {
-            if (it.isBlank()) DELIMITER else it
-        }
-        .split(" $DELIMITER ")
 }
 
 fun hasAllMandatoryFields(passport: String): Boolean {

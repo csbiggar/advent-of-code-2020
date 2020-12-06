@@ -1,5 +1,6 @@
 package day4
 
+import helpers.splitByBlankLines
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -9,7 +10,7 @@ internal class PassportsKtTest {
     fun `should split  single line into passports`() {
         val input = "x:y"
 
-        val result = splitToPassports(input)
+        val result = input.splitByBlankLines()
 
         assertThat(result).containsExactlyInAnyOrder("x:y")
     }
@@ -20,7 +21,7 @@ internal class PassportsKtTest {
                         |a:b
         """.trimMargin("|")
 
-        val result = splitToPassports(input)
+        val result = input.splitByBlankLines()
 
         assertThat(result).containsExactlyInAnyOrder("x:y a:b")
     }
@@ -33,7 +34,7 @@ internal class PassportsKtTest {
                         |c:d
         """.trimMargin("|")
 
-        val result = splitToPassports(input)
+        val result = input.splitByBlankLines()
 
         assertThat(result).containsExactlyInAnyOrder("x:y a:b", "c:d")
     }
