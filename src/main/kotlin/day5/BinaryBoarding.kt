@@ -4,15 +4,46 @@ import helpers.FileReader
 
 private val input = FileReader("/day5/input.txt").readText()
 
-fun main() {
-    val maxSeatId = input.lines()
-        .map {
-            findSeat(it).id
-        }
-        .maxOrNull()
+/*
+  D5#1 Max seat id = 818
+  D5#2 Missing seat id = 559
+ */
 
+fun main() {
+    val maxSeatId = findMaxSeatId()
     println(maxSeatId)
+
+    val missingSeat = findMissingSeat(seats())
+    println(missingSeat)
 }
+
+fun findMissingSeat(seats: List<Seat>): Int {
+    val surroundingSeats = seats
+        .sortedBy { it.id }
+        .windowed(size = 2, step = 1)
+        .first {
+            it[1].id - it[0].id > 1
+        }
+    return surroundingSeats.first().id + 1
+}
+
+fun findMissingId(ids: List<Int>): Int {
+    val surroundingSeats = ids.sorted()
+        .windowed(size = 2, step = 1)
+        .first {
+            it[1] - it[0] > 1
+        }
+    return surroundingSeats.first() + 1
+}
+
+private fun findMaxSeatId() = seats()
+    .map { it.id }
+    .maxOrNull()
+
+private fun seats() = input.lines()
+    .map {
+        findSeat(it)
+    }
 
 data class Seat(val row: Int, val column: Int) {
     val id = row * 8 + column
