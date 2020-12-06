@@ -29,28 +29,12 @@ internal class BinaryBoardingTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generateMissingSeatIdData")
-    fun `find missing from list of ids`(ids: List<Int>, missingId: Int) {
-        assertThat(findMissingId(ids)).isEqualTo(missingId)
-    }
-
-
-    @ParameterizedTest
     @MethodSource("generateMissingSeatData")
     fun `find missing from list of seats`(seats: List<Seat>, missingId: Int) {
         assertThat(findMissingSeat(seats)).isEqualTo(missingId)
     }
 
     companion object {
-        @JvmStatic
-        fun generateMissingSeatIdData(): Stream<Arguments> {
-            return Stream.of(
-                Arguments.of(listOf(4, 6), 5),
-                Arguments.of(listOf(3, 5, 2), 4),
-                Arguments.of(listOf(2, 3, 4, 5, 6, 8, 9), 7),
-            )
-        }
-
         @JvmStatic
         fun generateMissingSeatData(): Stream<Arguments> {
             return Stream.of(

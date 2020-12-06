@@ -4,13 +4,26 @@ import helpers.FileReader
 
 private val input = FileReader("/day5/input.txt").readText()
 
+data class Seat(val row: Int, val column: Int) {
+    val id = row * 8 + column
+}
+
+enum class Matcher(
+    val max: Int,
+    val lowerIndicator: Char,
+    val upperIndicator: Char
+) {
+    ROW(127, 'F', 'B'),
+    COLUMN(7, 'L', 'R')
+}
+
 /*
   D5#1 Max seat id = 818
   D5#2 Missing seat id = 559
  */
 
 fun main() {
-    val maxSeatId = findMaxSeatId()
+    val maxSeatId = findMaxSeatId(seats())
     println(maxSeatId)
 
     val missingSeat = findMissingSeat(seats())
@@ -27,16 +40,7 @@ fun findMissingSeat(seats: List<Seat>): Int {
     return surroundingSeats.first().id + 1
 }
 
-fun findMissingId(ids: List<Int>): Int {
-    val surroundingSeats = ids.sorted()
-        .windowed(size = 2, step = 1)
-        .first {
-            it[1] - it[0] > 1
-        }
-    return surroundingSeats.first() + 1
-}
-
-private fun findMaxSeatId() = seats()
+private fun findMaxSeatId(seats: List<Seat>) = seats
     .map { it.id }
     .maxOrNull()
 
@@ -44,19 +48,6 @@ private fun seats() = input.lines()
     .map {
         findSeat(it)
     }
-
-data class Seat(val row: Int, val column: Int) {
-    val id = row * 8 + column
-}
-
-enum class Matcher(
-    val max: Int,
-    val lowerIndicator: Char,
-    val upperIndicator: Char
-) {
-    ROW(127, 'F', 'B'),
-    COLUMN(7, 'L', 'R')
-}
 
 fun findSeat(input: String): Seat {
     val row = resolve(input.take(7), Matcher.ROW)
