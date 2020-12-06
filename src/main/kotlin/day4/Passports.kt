@@ -84,13 +84,13 @@ data class RawPassport(
     }
 
     fun isValid(): Boolean {
-        return (numberIsValid(byr, 1920, 2002)
+        return numberIsValid(byr, 1920, 2002)
                 && numberIsValid(iyr, 2010, 2020)
                 && numberIsValid(eyr, 2020, 2030)
                 && heightIsValid(hgt)
                 && hairColourIsValid(hcl)
                 && eyeColourIsValid(ecl)
-                && passportIdIsValid(pid))
+                && passportIdIsValid(pid)
     }
 
     private fun numberIsValid(byr: String?, minimumInclusive: Int, maximumInclusive: Int): Boolean {
