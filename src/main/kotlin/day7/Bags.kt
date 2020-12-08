@@ -62,8 +62,6 @@ class FindMyBag(private val myBag: Bag, private val rules: List<BagRule>) {
         bagsContainingMine: List<Bag> = emptyList()
     ): List<Bag> {
 
-        println("remainingRules: ${bagRules.size}, running total ${bagsContainingMine.size}")
-
         val (containsMine, doesNotContainMine) = bagRules
             .filterNot { it.parent == myBag }
             .filterNot { it.children.isEmpty() }
