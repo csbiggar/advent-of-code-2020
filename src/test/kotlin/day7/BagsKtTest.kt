@@ -1,7 +1,5 @@
 package day7
 
-import day5.Seat
-import day5.findMissingSeat
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -10,31 +8,38 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 internal class BagsKtTest {
+    private val gold = Bag("gold")
+    private val red = Bag("red")
+    private val white = Bag("white")
+    private val orange = Bag("orange")
+    private val yellow = Bag("yellow")
+    private val blue = Bag("blue")
+    private val olive = Bag("olive")
+    private val plum = Bag("plum")
+    private val black = Bag("black")
+
+    private val rules = listOf(
+        BagRule(parent = red, mapOf(white to Quantity(1), yellow to Quantity(2))),
+        BagRule(parent = orange, mapOf(white to Quantity(3), yellow to Quantity(4))),
+        BagRule(parent = white, mapOf(gold to Quantity(1))),
+        BagRule(parent = yellow, mapOf(gold to Quantity(2), blue to Quantity(9))),
+        BagRule(parent = gold, mapOf(olive to Quantity(1), plum to Quantity(2))),
+        BagRule(parent = olive, mapOf(blue to Quantity(3), black to Quantity(4))),
+        BagRule(parent = plum, mapOf(blue to Quantity(5), black to Quantity(6))),
+        BagRule(parent = blue, emptyMap()),
+        BagRule(parent = black, emptyMap()),
+    )
 
     @Test
     fun `find my bag`() {
-        val gold = Bag("gold")
-        val red = Bag("red")
-        val white = Bag("white")
-        val orange = Bag("orange")
-        val yellow = Bag("yellow")
-        val blue = Bag("blue")
-        val olive = Bag("olive")
-        val plum = Bag("plum")
-
-        val relationships = listOf(
-            BagRule(parent = red, mapOf(white to Quantity(1))),
-            BagRule(parent = orange, mapOf(white to Quantity(3), yellow to Quantity(1))),
-            BagRule(parent = white, mapOf(gold to Quantity(1))),
-            BagRule(parent = yellow, mapOf(gold to Quantity(2), blue to Quantity(9))),
-            BagRule(parent = gold, mapOf(olive to Quantity(1), plum to Quantity(9))),
-            BagRule(parent = olive, emptyMap()),
-            BagRule(parent = olive, mapOf(blue to Quantity(2))),    //Trick!
-            BagRule(parent = blue, emptyMap()),
-            BagRule(parent = plum, emptyMap()),
-        )
-        val result = FindMyBag(gold).withRules(relationships)
+        val result = FindMyBag(gold, rules).insideWhichOthers()
         assertThat(result).containsExactlyInAnyOrder(red, white, orange, yellow)
+    }
+
+    @Test
+    fun `find bags inside my bag`() {
+        val result = FindMyBag(gold, rules).containsHowManyOthers()
+        assertThat(result).isEqualTo(32)
     }
 
 }
