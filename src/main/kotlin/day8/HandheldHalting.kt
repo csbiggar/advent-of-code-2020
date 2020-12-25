@@ -1,5 +1,6 @@
 package day8
 
+import com.sun.net.httpserver.Authenticator
 import helpers.FileReader
 
 private val input = FileReader("/day8/input.txt").readText()
@@ -12,6 +13,12 @@ fun main() {
     println("Result $result")
 }
 
+enum class ResultType {
+    SUCCESS, FAIL
+}
+
+data class Result(val type: ResultType, val accumulatedValue: Long)
+
 class Game(input: String) {
     var accumulatedValue: Long = 0
         private set
@@ -20,9 +27,9 @@ class Game(input: String) {
 
     private val visitedIndexes = mutableListOf<Int>()
 
-    tailrec fun runProgram(instructionIndex: Int = 0): Long {
+    tailrec fun runProgram(instructionIndex: Int = 0): Result {
 
-        if (visitedIndexes.contains(instructionIndex)) return accumulatedValue
+        if (visitedIndexes.contains(instructionIndex)) return Result(ResultType.FAIL, accumulatedValue)
         visitedIndexes.add(instructionIndex)
 
         val instruction = instructions[instructionIndex]
@@ -34,7 +41,7 @@ class Game(input: String) {
             Operation.JUMP -> instructionIndex + instruction.argument
         }
 
-        return if (nextIndex + 1 > instructions.size) accumulatedValue
+        return if (nextIndex + 1 > instructions.size) return Result(ResultType.SUCCESS, accumulatedValue)
         else runProgram(nextIndex)
     }
 
