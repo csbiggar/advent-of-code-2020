@@ -1,6 +1,8 @@
 package day8
 
-import day8.Operation.*
+import day8.Operation.ACCUMULATE
+import day8.Operation.JUMP
+import day8.Operation.NOOP
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -14,7 +16,7 @@ internal class HandheldHaltingKtTest {
             nop +3
             nop -1
             """
-        assertThat(Game(input).runProgram().accumulatedValue).isEqualTo(0)
+        assertThat(Game(parseInstructions(input)).runProgram().accumulatedValue).isEqualTo(0)
     }
 
     @Test
@@ -22,7 +24,7 @@ internal class HandheldHaltingKtTest {
         val input = """
             acc +1
             """
-        assertThat(Game(input).runProgram().accumulatedValue).isEqualTo(1)
+        assertThat(Game(parseInstructions(input)).runProgram().accumulatedValue).isEqualTo(1)
     }
 
     @Test
@@ -32,13 +34,13 @@ internal class HandheldHaltingKtTest {
             acc +10
             acc +3
             """
-        assertThat(Game(input).runProgram().accumulatedValue).isEqualTo(3)
+        assertThat(Game(parseInstructions(input)).runProgram().accumulatedValue).isEqualTo(3)
     }
 
     @Test
     fun `should give a return type of SUCCESS when end of program is reached with no repeated instructions`() {
         val input = "nop +1"
-        assertThat(Game(input).runProgram().type).isEqualTo(ResultType.SUCCESS)
+        assertThat(Game(parseInstructions(input)).runProgram().type).isEqualTo(ResultType.SUCCESS)
     }
 
     @Test
@@ -49,7 +51,7 @@ internal class HandheldHaltingKtTest {
             jmp -1
             """
 
-        val runProgram = Game(input).runProgram()
+        val runProgram = Game(parseInstructions(input)).runProgram()
 
         // Then program aborts
         assertThat(runProgram.accumulatedValue).isEqualTo(0)
@@ -72,7 +74,7 @@ internal class HandheldHaltingKtTest {
             acc +6
         """.trimIndent()
 
-        assertThat(Game(input).runProgram().accumulatedValue).isEqualTo(5)
+        assertThat(Game(parseInstructions(input)).runProgram().accumulatedValue).isEqualTo(5)
     }
 
     @Test
@@ -90,7 +92,7 @@ internal class HandheldHaltingKtTest {
             acc +6
         """.trimIndent()
 
-        assertThat(Game(input).findCorrectedProgram()).isEqualTo(8)
+        assertThat(Game(parseInstructions(input)).findCorrectedProgram()).isEqualTo(8)
 
     }
 

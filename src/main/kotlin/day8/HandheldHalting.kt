@@ -11,7 +11,7 @@ private val input = FileReader("/day8/input.txt").readText()
     D8#1 Result 1928
  */
 fun main() {
-    val result = Game(input).runProgram()
+    val result = Game(parseInstructions(input)).runProgram()
     println("Result $result")
 }
 
@@ -21,11 +21,9 @@ enum class ResultType {
 
 data class Result(val type: ResultType, val accumulatedValue: Long)
 
-class Game(input: String) {
+class Game(private val instructions: List<Instruction>) {
     var accumulatedValue: Long = 0
         private set
-
-    private val instructions: List<Instruction> = parseInstructions(input)
 
     private val visitedIndexes = mutableListOf<Int>()
 
@@ -33,7 +31,6 @@ class Game(input: String) {
         TODO()
 //        val result = runProgram()
 //        if (result.type == ResultType.SUCCESS) return result.accumulatedValue
-
     }
 
     tailrec fun runProgram(instructionIndex: Int = 0): Result {
