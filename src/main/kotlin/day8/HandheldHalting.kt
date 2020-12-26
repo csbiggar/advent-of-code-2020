@@ -1,6 +1,8 @@
 package day8
 
-import com.sun.net.httpserver.Authenticator
+import day8.Operation.ACCUMULATE
+import day8.Operation.JUMP
+import day8.Operation.NOOP
 import helpers.FileReader
 
 private val input = FileReader("/day8/input.txt").readText()
@@ -27,6 +29,13 @@ class Game(input: String) {
 
     private val visitedIndexes = mutableListOf<Int>()
 
+    fun findCorrectedProgram(): Long {
+        TODO()
+//        val result = runProgram()
+//        if (result.type == ResultType.SUCCESS) return result.accumulatedValue
+
+    }
+
     tailrec fun runProgram(instructionIndex: Int = 0): Result {
 
         if (visitedIndexes.contains(instructionIndex)) return Result(ResultType.FAIL, accumulatedValue)
@@ -34,17 +43,31 @@ class Game(input: String) {
 
         val instruction = instructions[instructionIndex]
 
-        if (instruction.operation == Operation.ACCUMULATE) accumulatedValue += instruction.argument
+        if (instruction.operation == ACCUMULATE) accumulatedValue += instruction.argument
 
         val nextIndex = when (instruction.operation) {
-            Operation.NOOP, Operation.ACCUMULATE -> instructionIndex + 1
-            Operation.JUMP -> instructionIndex + instruction.argument
+            NOOP, ACCUMULATE -> instructionIndex + 1
+            JUMP -> instructionIndex + instruction.argument
         }
 
         return if (nextIndex + 1 > instructions.size) return Result(ResultType.SUCCESS, accumulatedValue)
         else runProgram(nextIndex)
     }
+}
 
+fun replace(list: List<Instruction>, index: Int): List<Instruction> {
+    return list.mapIndexed { i, instruction ->
+        if (i != index) {
+            instruction
+        } else {
+            val newOperation = when (instruction.operation) {
+                JUMP -> NOOP
+                NOOP -> JUMP
+                ACCUMULATE -> ACCUMULATE
+            }
+            Instruction(newOperation, instruction.argument)
+        }
+    }
 }
 
 fun parseInstructions(input: String): List<Instruction> {
@@ -54,15 +77,14 @@ fun parseInstructions(input: String): List<Instruction> {
             val bits = it.trim().split(" ")
             Instruction(
                 operation = when (bits[0]) {
-                    "acc" -> Operation.ACCUMULATE
-                    "jmp" -> Operation.JUMP
-                    "nop" -> Operation.NOOP
+                    "acc" -> ACCUMULATE
+                    "jmp" -> JUMP
+                    "nop" -> NOOP
                     else -> throw IllegalArgumentException("Unknown operation [${bits[0]}] in instruction $it")
                 },
                 argument = bits[1].toInt()
             )
         }
-
 }
 
 enum class Operation {
