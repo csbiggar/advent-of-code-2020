@@ -39,7 +39,7 @@ class Game(private val instructions: List<Instruction>) {
         val newInstructions = replace(instructions, index)
         val result = Game(newInstructions).accumulationUpToFirstRepeatedInstruction()
         return if (result.type == ResultType.SUCCESS) {
-            println("Successful replacement occured at index $index, ${instructions[index]} ")
+            println("Successful replacement occurred at index $index, ${instructions[index]} ")
             result.accumulatedValue
         } else {
             correctedGameResult(index + 1)
