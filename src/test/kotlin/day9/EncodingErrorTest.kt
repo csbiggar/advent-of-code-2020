@@ -1,7 +1,6 @@
 package day9
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -28,9 +27,17 @@ internal class EncodingErrorTest {
         assertThat(Encoder(input, preambleSize).isOk(index)).isEqualTo(expectedResult)
     }
 
+    @ParameterizedTest
+    @MethodSource("generatePart2TestData")
+    fun `find run that sums to given target`(
+        input: List<Long>,
+        target: Long,
+        expectedResult: List<Long>,
+    ) {
+        assertThat(Encoder(input, 1).findRunThatSumsTo(target)).isEqualTo(expectedResult)
+    }
 
     @Test
-    @Disabled("Not implemented yet")
     fun `example works`() {
         val preambleSize = 5
         val input = listOf<Long>(
@@ -63,19 +70,34 @@ internal class EncodingErrorTest {
         @JvmStatic
         fun generateTestData(): Stream<Arguments> {
             return Stream.of(
-                arguments(listOf(1, 2, 4), 2, 2, false),
-                arguments(listOf(1, 2, 3), 2, 2, true),
-                arguments(listOf(1, 2, 3, 4), 2, 3, false),
-                arguments(listOf(1, 2, 3, 4, 5), 2, 4, false),
-                arguments(listOf(1, 2, 3, 4, 5), 3, 4, true),
+                partOneArguments(listOf(1, 2, 4), 2, 2, false),
+                partOneArguments(listOf(1, 2, 3), 2, 2, true),
+                partOneArguments(listOf(1, 2, 3, 4), 2, 3, false),
+                partOneArguments(listOf(1, 2, 3, 4, 5), 2, 4, false),
+                partOneArguments(listOf(1, 2, 3, 4, 5), 3, 4, true),
             )
         }
 
-        private fun arguments(input: List<Long>, preambleSize: Int, index: Int, expectedResult: Boolean) = Arguments.of(
+        @JvmStatic
+        fun generatePart2TestData(): Stream<Arguments> {
+            return Stream.of(
+                partTwoArguments(input = listOf(1, 2, 3), target = 3, expectedResult = listOf(1, 2)),
+                partTwoArguments(input = listOf(1, 2, 3, 4), target = 5, expectedResult = listOf(2, 3)),
+            )
+        }
+
+        private fun partTwoArguments(input: List<Long>, target: Long, expectedResult: List<Long>) = Arguments.of(
             input,
-            preambleSize,
-            index,
+            target,
             expectedResult
         )
+
+        private fun partOneArguments(input: List<Long>, preambleSize: Int, index: Int, expectedResult: Boolean) =
+            Arguments.of(
+                input,
+                preambleSize,
+                index,
+                expectedResult
+            )
     }
 }
