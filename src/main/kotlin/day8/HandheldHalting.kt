@@ -9,11 +9,19 @@ private val input = FileReader("/day8/input.txt").readText()
 
 /*
     D8#1 Result 1928
+    D8#2 Result 1319
  */
 fun main() {
-    val result = Game(parseInstructions(input)).runProgram()
-    println("Result $result")
+    val instructions = parseInstructions(input)
+
+    val result = Game(instructions).accumulationUpToFirstRepeatedInstruction()
+    println("Result before first repeated instruction $result")
+
+    val correctedResult = Game(instructions).correctedGameResult()
+    println("Result after correction $correctedResult")
+
 }
+
 
 enum class ResultType {
     SUCCESS, FAIL
@@ -27,13 +35,18 @@ class Game(private val instructions: List<Instruction>) {
 
     private val visitedIndexes = mutableListOf<Int>()
 
-    fun findCorrectedProgram(): Long {
-        TODO()
-//        val result = runProgram()
-//        if (result.type == ResultType.SUCCESS) return result.accumulatedValue
+    tailrec fun correctedGameResult(index: Int = 0): Long {
+        val newInstructions = replace(instructions, index)
+        val result = Game(newInstructions).accumulationUpToFirstRepeatedInstruction()
+        return if (result.type == ResultType.SUCCESS) {
+            println("Successful replacement occured at index $index, ${instructions[index]} ")
+            result.accumulatedValue
+        } else {
+            correctedGameResult(index + 1)
+        }
     }
 
-    tailrec fun runProgram(instructionIndex: Int = 0): Result {
+    tailrec fun accumulationUpToFirstRepeatedInstruction(instructionIndex: Int = 0): Result {
 
         if (visitedIndexes.contains(instructionIndex)) return Result(ResultType.FAIL, accumulatedValue)
         visitedIndexes.add(instructionIndex)
@@ -48,7 +61,7 @@ class Game(private val instructions: List<Instruction>) {
         }
 
         return if (nextIndex + 1 > instructions.size) return Result(ResultType.SUCCESS, accumulatedValue)
-        else runProgram(nextIndex)
+        else accumulationUpToFirstRepeatedInstruction(nextIndex)
     }
 }
 
